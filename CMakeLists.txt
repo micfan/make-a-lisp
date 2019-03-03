@@ -29,5 +29,5 @@ message(STATUS ${LINENOISE_INCLUDE_DIR})
 
 
 add_subdirectory(step0_repl)
-# add_subdirectory(step1_read_print)
+add_subdirectory(step1_read_print)
 
