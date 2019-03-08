@@ -44,7 +44,7 @@ void rep() {
 }
 
 
-std::shared_ptr<spdlog::logger> lg = spdlog::stdout_color_mt("console");
+spdog lg = spdlog::stdout_color_mt("console");
 
 int main() {
 //    lg = spdlog::stdout_color_mt("console");

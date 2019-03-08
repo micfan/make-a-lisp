@@ -12,7 +12,8 @@
 #include <regex>
 #include <vector>
 
-extern std::shared_ptr<spdlog::logger> lg;
+using spdog = std::shared_ptr<spdlog::logger>;
+extern spdog lg;
 
 using String = std::string;
 using Regex = std::regex;

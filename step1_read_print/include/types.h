@@ -37,10 +37,10 @@ private:
 
 class MalConstant : public MalValue {
 public:
-    MalConstant(const String name) : m_name(name) {
+    MalConstant(const String& name) : m_name(name) {
 //        lg->debug("MalConstant().m_name: {}", m_name);
     }
-    String str() const override {
+    virtual String str() const override {
         return m_name;
     }
 private:
@@ -51,9 +51,9 @@ private:
 class MalInt : public MalValue {
 public:
 //    MalInt(int64_t value) : m_value(value) {}
-    MalInt(int64_t value) : MalValue(), m_value(value) {}
+    MalInt(int64_t value) : m_value(value) {}
     MalInt(const String& token) : m_value(std::stoi(token)) {}
-    String str() const override {
+    virtual String str() const override {
         auto s = std::to_string(m_value);
         return s;
     }
@@ -66,19 +66,18 @@ private:
 class MalStringBase : public MalValue {
 public:
     MalStringBase() = default;
-    MalStringBase(const String& token) : m_value(token) {};
+    explicit MalStringBase(const String& token) : m_value(token) {};
     String str() const override { return m_value; }
-private:
+protected:
     const String m_value;
 };
 
 
 class MalString : public MalStringBase {
 public:
-    MalString(const String& token) : m_value(token) {};
+    MalString(const String& token) : MalStringBase(token) {};
     String str() const override { return m_value; }
 private:
-    const String m_value;
 };
 
 
