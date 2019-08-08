@@ -7,21 +7,21 @@ using namespace std;
 
 
 static MalPtr eval(MalPtr ast) {
-  auto ret = ast;
-  return ret;
+    auto ret = ast;
+    return ret;
 }
 
 String print(MalPtr ast) {
-  auto s = ast->str();
-  cout << "Out ==> " << s << endl;
-  return ast->str();
+    auto s = ast->str();
+    cout << "Out ==> " << s << endl;
+    return ast->str();
 }
 
 void repl() {
-  string line = "[]";
-  while (!(line = linenoise("In: ")).empty()) {
-    auto str = print(eval(read(line)));
-  }
+    string line = "[]";
+    while (!(line = linenoise("In: ")).empty()) {
+        auto str = print(eval(read(line)));
+    }
 }
 
 void rep() {
@@ -50,8 +50,8 @@ int main() {
 //    lg = spdlog::stdout_color_mt("console");
 
     lg->set_level(spdlog::level::trace);
-  
-//  repl();
-    rep();
-  return 0;
+
+    repl();
+//    rep();
+    return 0;
 }

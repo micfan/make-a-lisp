@@ -111,21 +111,28 @@ MalPtr Reader::read_form() {
     }
 
     String token = peek();
-    Regex r(R"**([\)\]\}])**");
-    if (std::regex_match(token, r)) {
+    Regex r_closed(R"**([\)\]\}])**");
+    if (std::regex_match(token, r_closed)) {
         lg->debug("Got a closed token: {}", token);
-    } else {
-        lg->debug("Got a not close token: {}", token);
     }
-    if (token == "(") {
-        next();
-        return read_list<MalVec>(")");
+
+    Regex r_opening(R"**([\(\[\{])**");
+    if (std::regex_match(token, r_opening)) {
+        lg->debug("Got an opening token: {}", token);
+
+        if (token == "(") {
+            next();
+            return read_list<MalVec>(")");
+        }
+        if (token == "[") {
+            return read_list<MalVec>("]");
+        }
+        if (token == "{") {
+            return read_list<MalVec>("}");
+        }
     }
-    if (token == "[") {
-        return read_list<MalVec>("]");
-    }
-    if (token == "{") {
-        return read_list<MalVec>("}");
+    else {
+        lg->debug("Got a atom-like token: {}", token);
     }
     MalPtr atom = read_atom();
     return atom;
@@ -133,6 +140,7 @@ MalPtr Reader::read_form() {
 
 template <class T>
 MalPtr Reader::read_list(const String& end_str) {
+    lg->info("read_list(\"{}\") start", end_str);
     std::unique_ptr<MalVec> v(new MalVec);
     while (true) {
 //        if (eof()) {
@@ -143,7 +151,7 @@ MalPtr Reader::read_list(const String& end_str) {
         auto current = peek();
         lg->info("current token: {}", current);
         if (current == end_str) {
-            lg->info("break, current token: {}", current);
+            lg->info("read_list(\"{}\") break, current token is the end token: {}", end_str, current);
             next();
             break;
         }
@@ -198,6 +206,13 @@ MalPtr Reader::read_atom() {
         return i;
     }
 
-    return nullptr;
+    Regex op_regex("^[-+*/]{1}$");
+    if (regex_match(token, op_regex)) {
+        MalString ms(token);
+        auto s = mal::string(token);
+        return s;
+    }
+
+    return mal::string(token);
 }
 
