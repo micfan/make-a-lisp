@@ -1,7 +1,3 @@
-//
-// Created by mic on 7/23/18.
-//
-
 #include "types.h"
 
 namespace mal {
@@ -10,7 +6,6 @@ namespace mal {
     };
 
     MalPtr nil_value() {
-//        static MalPtr c(new MalConstant("nil"));
         return MalPtr(new MalConstant("nil"));
     }
 
@@ -36,10 +31,6 @@ namespace mal {
     MalPtr list(T value) {
         return MalPtr(new T(value));
     }
-
-//    MalPtr list(MalList& value) {
-//        return MalPtr(new MalList(value.begin(), value.end()));
-//    }
 
     MalPtr list(MalVec* v) {
         return MalPtr(new MalList(v));

@@ -1,7 +1,3 @@
-//
-// Created by mic on 6/24/18.
-//
-
 #pragma once
 
 #include "ref_count.h"
