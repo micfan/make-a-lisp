@@ -1,7 +1,3 @@
-//
-// Created by mic on 6/24/18.
-//
-
 #ifndef MAL_REF_COUNT_H
 #define MAL_REF_COUNT_H
 
@@ -13,12 +9,12 @@ public:
     RefCounted() : m_ref_count(0) {};
     virtual ~RefCounted() = default;
 
-    const RefCounted* ref_acquire() const {
+    const RefCounted* ref_increase() const {
         m_ref_count++;
         return this;
     }
 
-    int ref_dec() const {
+    int ref_decrease() const {
         return --m_ref_count;
     }
 
@@ -27,7 +23,6 @@ public:
     };
 
 private:
-//    RefCounted(const RefCounted&); // no copy ctor
     RefCounted& operator = (const RefCounted&); // no assignments
     mutable int m_ref_count;
 };
@@ -78,14 +73,14 @@ public:
 private:
     void acquire(T* object) {
         if (object != nullptr) {
-            object->ref_acquire();
+            object->ref_increase();
         }
         release();
         m_object = object;
     }
 
     void release() {
-        if (m_object != nullptr && (m_object->ref_dec() == 0)) {
+        if (m_object != nullptr && (m_object->ref_decrease() == 0)) {
             delete m_object;
         }
     }
@@ -93,4 +88,4 @@ private:
     T* m_object;
 };
 
-#endif //MAL_REF_COUNT_H
+#endif

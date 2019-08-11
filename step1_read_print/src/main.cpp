@@ -24,30 +24,44 @@ void repl() {
     }
 }
 
+void rep(const string &line ) {
+    if (!line.empty()) {
+        auto str = print(eval(read(line)));
+    }
+}
+
 void rep() {
-//    string line = R"**("( + 2 (* 3 4) )")**";
 
     string a_nil = R"**("nil")**";
-    print(eval(read(a_nil)));
+    rep(a_nil);
 
-    string a_str = R"**("1")**";
-    print(eval(read(a_str)));
+    string a_num = R"**(123)**";
+    rep(a_num);
 
-    string a_num = R"**(1)**";
-    print(eval(read(a_num)));
+    string a_str = R"**("123")**";
+    rep(a_str);
 
-    string list = R"**((123 456 789))**";
-    print(eval(read(list)));
+    string a_symbol = R"**(abc)**";
+    rep(a_symbol);
+
+    string a_list = R"**((123 456))**";
+    rep(a_list);
+
+    string a_list2 = R"**((123 456 789))**";
+    rep(a_list);
+
+    string a_stmt = R"**(( + 2 (* 3 4) ))**";
+
+    rep(a_stmt);
 
     string nil = R"**(nil)**";
-    print(eval(read(nil)));
+    rep(nil);
 }
 
 
 spdog lg = spdlog::stdout_color_mt("console");
 
 int main() {
-//    lg = spdlog::stdout_color_mt("console");
 
     lg->set_level(spdlog::level::trace);
 

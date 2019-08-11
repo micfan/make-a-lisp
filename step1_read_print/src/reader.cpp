@@ -1,10 +1,3 @@
-//
-// Created by mic on 6/22/18.
-//
-
-#include "types.h"
-#include "reader.h"
-
 #include <string>
 #include <vector>
 #include <array>
@@ -15,10 +8,15 @@
 #include <functional>
 #include <typeinfo>
 
+#include "types.h"
+#include "reader.h"
+
 
 using namespace std;
 
-Reader::Reader(const string& input) : m_iter(input.begin()), m_end(input.end()) {
+Reader::Reader(const string& input)
+    : m_iter(input.begin())
+    , m_end(input.end()) {
     next();
 }
 
@@ -84,15 +82,6 @@ void Reader::next_token() {
             return;
         }
     }
-
-/*
-    string mismatch(m_iter, m_end);
-    if (mismatch[0] == '"') {
-        cerr << "Expected \", got EOF" << endl;
-    } else {
-        cerr << "Unexpected: " << mismatch.c_str() << endl;
-    }
-    */
 }
 
 MalPtr read(const String &input) {

@@ -1,7 +1,3 @@
-//
-// Created by mic on 6/22/18.
-//
-
 #ifndef MAL_READER_H
 #define MAL_READER_H
 
@@ -25,14 +21,16 @@ class Reader {
 public:
     Reader(const std::string& input);
 
-    ~Reader() {
-        // todo:
-    }
+    ~Reader() = default;
 
     bool eof() const;
 
     String peek() const;
 
+    /*
+     * position++
+     * @return: the token on current position
+     */
     String next();
 
     MalPtr read_form();
@@ -55,5 +53,5 @@ private:
 
 MalPtr read(const String &input);
 
-#endif //MAL_READER_H
+#endif
 
