@@ -114,9 +114,11 @@ MalPtr Reader::read_form() {
             return read_list<MalVec>(")");
         }
         if (token == "[") {
+            next();
             return read_list<MalVec>("]");
         }
         if (token == "{") {
+            next();
             return read_list<MalVec>("}");
         }
     }

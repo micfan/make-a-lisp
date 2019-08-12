@@ -38,8 +38,8 @@ public:
         return std::string("unknown");
     };
 
-    virtual MalPtr eval() const {
-        return mal::nil_value();
+    virtual MalPtr eval() {
+        return this;
     };
 
     MalPtr value() const {
@@ -155,7 +155,7 @@ public:
         return fmt::format("({})", MalSeq::str());
     }
 
-    MalPtr eval() const override {
+    MalPtr eval() override {
         auto first_token = begin()->ptr()->str();
         if (first_token  == "+") {
             lg->info("MalList start with an op: {}, evaluating...", first_token);
@@ -176,7 +176,7 @@ public:
             return mal::integer(val);
         }
 
-        return mal::nil_value();
+        return this;
     };
 };
 
