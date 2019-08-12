@@ -42,8 +42,8 @@ public:
         return this;
     };
 
-    MalPtr value() const {
-        return mal::nil_value();
+    MalPtr value() {
+        return this;
     };
 
 private:
