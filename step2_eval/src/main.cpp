@@ -5,10 +5,8 @@
 
 using namespace std;
 
-
 static MalPtr eval(MalPtr ast) {
-    auto ret = ast;
-    return ret;
+    return ast->eval();
 }
 
 String print(MalPtr ast) {

@@ -5,6 +5,27 @@
 #include <iostream>
 #include <map>
 
+class MalList;
+
+namespace mal {
+
+    MalPtr atom(MalPtr value);
+    MalPtr boolean(bool value);
+    MalPtr false_value();
+    MalPtr integer(int64_t value);
+    MalPtr integer(const String& token);
+
+    MalPtr string(const String& token);
+
+    MalPtr list(MalVec* items);
+    MalPtr list(::MalList& items);
+    MalPtr list(MalIter begin, MalIter  end);
+    MalPtr list(MalPtr& a);
+    MalPtr list(MalPtr a, MalPtr b);
+    MalPtr list(MalPtr a, MalPtr b, MalPtr c);
+    MalPtr nil_value ();
+    MalPtr true_value();
+};
 
 class MalValue : public RefCounted {
 public:
@@ -12,6 +33,18 @@ public:
     explicit MalValue(MalPtr& meta) : m_meta(meta) {};
 
     virtual String str() const = 0;
+
+    virtual String form() const {
+        return std::string("unknown");
+    };
+
+    virtual MalPtr eval() const {
+        return mal::nil_value();
+    };
+
+    MalPtr value() const {
+        return mal::nil_value();
+    };
 
 private:
     MalPtr m_meta;
@@ -39,6 +72,14 @@ public:
         return std::to_string(m_value);
     }
 
+    String form() const override {
+        return std::string("MalInt");
+    };
+
+    int64_t value() const {
+        return m_value;
+    };
+
 private:
     const int64_t m_value;
 };
@@ -54,6 +95,10 @@ public:
     String str() const override {
         return m_value;
     }
+
+    String form() const override {
+        return std::string("MalStringBase");
+    };
 protected:
     const String m_value;
 };
@@ -109,6 +154,30 @@ public:
     String str() const override {
         return fmt::format("({})", MalSeq::str());
     }
+
+    MalPtr eval() const override {
+        auto first_token = begin()->ptr()->str();
+        if (first_token  == "+") {
+            lg->info("MalList start with an op: {}, evaluating...", first_token);
+
+            int64_t val(0);
+            auto it = begin();
+            it++;
+            for(; it != end(); it++) {
+                auto tok = it->ptr()->str();
+                lg->info("MalInt token: {}", tok);
+                if (it->ptr()->form() == "MalInt") {
+                    val += ((MalInt *)(it->ptr()))->value();
+                } else {
+                    lg->info("skipped non-MalInt token: {}", tok);
+                }
+            }
+
+            return mal::integer(val);
+        }
+
+        return mal::nil_value();
+    };
 };
 
 
@@ -131,23 +200,6 @@ private:
 };
 
 
-namespace mal {
-    MalPtr atom(MalPtr value);
-    MalPtr boolean(bool value);
-    MalPtr false_value();
-    MalPtr integer(int64_t value);
-    MalPtr integer(const String& token);
 
-    MalPtr string(const String& token);
-
-    MalPtr list(MalVec* items);
-    MalPtr list(MalList& items);
-    MalPtr list(MalIter begin, MalIter  end);
-    MalPtr list(MalPtr& a);
-    MalPtr list(MalPtr a, MalPtr b);
-    MalPtr list(MalPtr a, MalPtr b, MalPtr c);
-    MalPtr nil_value ();
-    MalPtr true_value();
-};
 
 #endif

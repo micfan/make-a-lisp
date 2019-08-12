@@ -147,7 +147,7 @@ MalPtr Reader::read_list(const String& end_str) {
 
         MalPtr form = read_form();
         if (form != nullptr) {
-            lg->info("push_back: {}", form->str());
+            lg->info("push_back, form: {}, value: {}", form->form(), form->str());
             v->push_back(form);
         }
     }
