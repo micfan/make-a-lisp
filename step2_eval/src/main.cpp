@@ -18,7 +18,12 @@ String print(MalPtr ast) {
 void repl() {
     string line = "[]";
     while (!(line = linenoise("In: ")).empty()) {
-        auto str = print(eval(read(line)));
+        try {
+            print(eval(read(line)));
+        }
+        catch (MalSyntaxErrorException err) {
+
+        }
     }
 }
 

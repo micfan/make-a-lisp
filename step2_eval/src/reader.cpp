@@ -95,8 +95,8 @@ MalPtr read(const String &input) {
 
 MalPtr Reader::read_form() {
     if (eof()) {
-        lg->error("Expect form, but got EOF");
-        return MalPtr();
+        lg->error("read_form() ing, but got EOF");
+        return nullptr;
     }
 
     String token = peek();
@@ -132,13 +132,13 @@ MalPtr Reader::read_list(const String& end_str) {
     lg->info("read_list(\"{}\") start", end_str);
     std::unique_ptr<MalVec> v(new MalVec);
     while (true) {
-//        if (eof()) {
-//            // todo:
-//            cerr << "Expect form, but got EOF" << endl;
-//            throw MalSyntaxErrorException();
-//        }
+        if (eof()) {
+            lg->error("MalSyntaxErrorException: close token {} not found for MalList", end_str);
+            throw MalSyntaxErrorException();
+        }
+
         auto current = peek();
-        lg->info("current token: {}", current);
+        lg->info("read_list() ing, current token: {}", current);
         if (current == end_str) {
             lg->info("read_list(\"{}\") break, current token is the end token: {}", end_str, current);
             next();
