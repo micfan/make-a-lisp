@@ -1,4 +1,6 @@
 .vscode/
+*.diff
+*.patch
 *.o
 *build*
 .idea/

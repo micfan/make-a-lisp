@@ -147,6 +147,8 @@ public:
     MalVec* items() const { return m_items;}
 };
 
+using env_fn = std::function<int(int, int)>;
+extern std::map<std::string, env_fn> repl_env;
 
 class MalList : public MalSeq {
 public:
@@ -157,17 +159,20 @@ public:
 
     MalPtr eval() override {
         auto first_token = begin()->ptr()->str();
-        if (first_token  == "+") {
-            lg->info("MalList start with an op: {}, evaluating...", first_token);
-
+        auto fn = repl_env[first_token];
+        lg->info("MalList start with an op: {}, evaluating...", first_token);
+        {
             int64_t val(0);
-            auto it = begin();
-            it++;
-            for(; it != end(); it++) {
+            for(auto it = begin(); it != end(); it++) {
                 auto tok = it->ptr()->str();
                 lg->info("MalInt token: {}", tok);
                 if (it->ptr()->form() == "MalInt") {
-                    val += ((MalInt *)(it->ptr()))->value();
+                    int64_t b = ((MalInt *)(it->ptr()))->value();
+                    if (it == begin() + 1) {
+                        val = b;
+                    } else {
+                        val = fn(val, b);
+                    }
                 } else {
                     lg->info("skipped non-MalInt token: {}", tok);
                 }
@@ -198,8 +203,6 @@ public:
 private:
     std::map<MalPtr, MalPtr>* m_values;
 };
-
-
 
 
 #endif

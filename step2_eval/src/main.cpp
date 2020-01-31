@@ -63,11 +63,19 @@ void rep() {
 
 
 spdog lg = spdlog::stdout_color_mt("console");
+std::map<std::string, env_fn> repl_env;
 
 int main() {
 
     lg->set_level(spdlog::level::trace);
 
+    // init environment
+    repl_env = map<string, env_fn>{
+            {"+", [](int a, int b){ return a + b;}},
+            {"-", [](int a, int b){ return a - b;}},
+            {"*", [](int a, int b){ return a * b;}},
+            {"/", [](int a, int b){ return a / b;}},
+    };
     repl();
 //    rep();
     return 0;
